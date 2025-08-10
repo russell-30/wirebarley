@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/wirebarley?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: wirebarley
+      SPRING_DATASOURCE_PASSWORD: wirebarley
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_DATABASE: wirebarley
+      MYSQL_USER: wirebarley
+      MYSQL_PASSWORD: wirebarley
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql-data:
